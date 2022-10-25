@@ -1,0 +1,23 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo '🏗️👷 Styling, testing and building your project before committing'
+
+# Check Typescript standards (only for TS project)
+npx tsc ||
+(
+    echo '⚠️️⚙️ You left errors in your code ️⚙️⚠️
+            TSC Check Failed. Check your errors / warnings, add changes and try commit again.';
+    false;
+)
+
+# Check format
+npx lint-staged && git add -A ||
+(
+        echo '❌❌ ERROR ❌❌ - 🤢🤮 Your styling looks disgusting. 🤢🤮
+                Make the required changes listed above, add changes and try to commit again.'
+        false;
+)
+
+# Everything passes, now we can commit
+echo '✅✅✅ You are lucky, you win this time... I am committing this now. ✅✅✅✅'
